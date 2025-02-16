@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "mem.h": "c",
+        "teletype.h": "c",
+        "vga.h": "c",
+        "io.h": "c",
+        "definitions.h": "c",
+        "hash.h": "c",
+        "gdt.h": "c"
+    }
+}
