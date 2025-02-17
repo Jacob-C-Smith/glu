@@ -9,22 +9,10 @@ struct g_bump_s
 
 // Type definitions
 typedef struct g_bump_s g_bump_t;
+typedef int ( alloc_fn )( void **, size_t );
 
-static int initialized = 0;
 static g_bump allocator = (void *) 0;
-
-static void singleton_check ( void ) 
-{
-    
-    // Singleton
-    if ( initialized == 0 )
-        bump_construct((g_bump *)&allocator, (void *)0x2FFFF0, 4*1024*1024);
-    
-    initialized = 1;
-
-    // Done
-    return;
-}
+static alloc_fn alloc_init, alloc_impl;
 
 // Function definitions
 int bump_construct ( g_bump *p_bump, void *base, size_t size )
@@ -111,14 +99,15 @@ int bump_alloc ( g_bump bump, void **pp_result, size_t size )
     no_mem:    return 0;
 }
 
-int alloc ( void **pp_result, size_t size )
-{
-
-    // State check
-    singleton_check();
-
-    // Allocate memory
-    bump_alloc(allocator, pp_result, size);
+// Initialize the allocator function to point to the initializer fn
+alloc_fn *alloc = alloc_init;
+static int alloc_init ( void **pp_result, size_t size ) {
+    bump_construct((g_bump *)&allocator, (void *)0x2FFFF0, 4*1024*1024);
+    alloc = alloc_impl;
+    return alloc_impl(pp_result, size);
+}
+static int alloc_impl ( void **pp_result, size_t size ) {
+    return bump_alloc(allocator, pp_result, size);
 }
 
 int bump_destroy ( g_bump *p_bump )

@@ -45,7 +45,7 @@ int bump_alloc ( g_bump bump, void **pp_result, size_t size );
  * 
  * @return 1 on success, 0 on error 
  */
-int alloc ( void **pp_result, size_t size );
+extern int ( *alloc )( void **pp_result, size_t size );
 
 /** !
  * Destroy a bump allocator
