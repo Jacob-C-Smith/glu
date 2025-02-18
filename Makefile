@@ -30,9 +30,9 @@ rel: $(OUTFILE)
 run: $(OUTFILE)
 	qemu-system-i386 -s -S -daemonize -cdrom $<
 	if which gdb; then \
-		gdb -ex "b kernel_main\ntarget remote localhost:1234" $<; \
+		gdb -ex "target remote localhost:1234" $<; \
 	else \
-		lldb --one-line "b kernel_main\ngdb-remote localhost:1234" $<; \
+		lldb --one-line "gdb-remote localhost:1234" $<; \
 	fi
 
 $(OUTFILE): $(OBJS)

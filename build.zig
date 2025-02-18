@@ -63,8 +63,8 @@ fn runKernel(b: *std.Build, kernel: *Step.Compile) !void {
 fn runDebugger(b: *std.Build, kernel: *Step.Compile) *Step.Run {
     const debuggers: []const []const u8 = &.{ "gdb", "lldb" };
     const arguments: []const []const []const u8 = &.{
-        &.{ "-ex", "b kernel_main\ntarget remote localhost:1234" },
-        &.{ "--one-line", "b kernel_main\ngdb-remote localhost:1234" },
+        &.{ "-ex", "target remote localhost:1234" },
+        &.{ "--one-line", "gdb-remote localhost:1234" },
     };
 
     var run_gdb = for (debuggers, arguments) |dbg, args| {
